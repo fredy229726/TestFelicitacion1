@@ -19,8 +19,6 @@
         }
 
         #text-container {
-            justify-content: center;
-            align-items: center;
             position: absolute;
             top: 50%;
             left: 50%;
@@ -31,6 +29,7 @@
             display: flex;
             gap: 0.5rem;
             opacity: 0; /* Inicialmente invisible */
+            text-align: center;
         }
 
         .star {
@@ -89,23 +88,28 @@
         const textContainer = document.getElementById('text-container');
         const body = document.body;
 
+        // Centrar el texto en la pantalla
+        const centerX = window.innerWidth / 2;
+        const centerY = window.innerHeight / 2;
+
         text.split('').forEach((char, index) => {
             const star = document.createElement('span');
             star.classList.add('star');
             star.textContent = '★';
             body.appendChild(star);
 
-            // Posición inicial aleatoria para un efecto dinámico
+            // Posición inicial aleatoria de la estrella
             const startX = Math.random() * window.innerWidth;
             const startY = -50;
             star.style.left = `${startX}px`;
             star.style.top = `${startY}px`;
 
-            // Caída animada hacia el área del texto
-            setTimeout(() => {
-                const targetX = (window.innerWidth / 2) - (text.length * 10) + index * 20;
-                const targetY = window.innerHeight / 2;
+            // Calcular posición final de la estrella
+            const targetX = centerX - (text.length * 10) + index * 20;
+            const targetY = centerY;
 
+            // Animar estrella hacia el texto
+            setTimeout(() => {
                 star.style.transition = 'all 3s ease';
                 star.style.transform = `translate(${targetX - startX}px, ${targetY - startY}px)`;
 
@@ -117,7 +121,7 @@
                     letter.style.fontSize = '3rem';
                     textContainer.appendChild(letter);
 
-                    // Quitar la estrella después de la transformación
+                    // Eliminar estrella después de transformación
                     star.remove();
 
                     // Mostrar texto completo al final
