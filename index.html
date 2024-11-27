@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>¡Feliz Navidad Aguado!</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            height: 100vh;
+            background: url('https://i.pinimg.com/originals/52/9e/81/529e815c282a01d7646b4c073d0bde10.gif') 
+            no-repeat center center fixed;
+            background-size: cover;
+            overflow: hidden;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        #text-container {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            font-family: 'Comic Sans MS', cursive, sans-serif;
+            font-size: 3rem;
+            color: white;
+            display: flex;
+            gap: 0.5rem;
+            opacity: 0; /* Inicialmente invisible */
+        }
+
+        .star {
+            position: absolute;
+            font-size: 2.5rem;
+            color: yellow;
+        }
+
+        @keyframes fall {
+            from {
+                transform: translateY(-300px);
+                opacity: 1;
+            }
+            to {
+                transform: translateY(0);
+                opacity: 0;
+            }
+        }
+
+        /* Animación de fade-in para el texto final */
+        @keyframes fade-in {
+            from {
+                opacity: 0;
+                transform: scale(0.8);
+            }
+            to {
+                opacity: 1;
+                transform: scale(1);
+            }
+        }
+
+        .visible {
+            opacity: 1;
+            animation: fade-in 2s ease forwards;
+        }
+
+        /* Ajustes para móviles */
+        @media (max-width: 600px) {
+            #text-container {
+                font-size: 2rem; /* Reducir el tamaño del texto */
+            }
+
+            .star {
+                font-size: 1.5rem; /* Reducir tamaño de las estrellas */
+            }
+        }
+    </style>
+</head>
+<body>
+    <div id="text-container">
+        <!-- Texto se llenará dinámicamente -->
+    </div>
+
+    <script>
+        const text = "¡Feliz Navidad Aguado!";
+        const textContainer = document.getElementById('text-container');
+        const body = document.body;
+
+        text.split('').forEach((char, index) => {
+            const star = document.createElement('span');
+            star.classList.add('star');
+            star.textContent = '★';
+            body.appendChild(star);
+
+            // Posición inicial aleatoria para un efecto dinámico
+            const startX = Math.random() * window.innerWidth;
+            const startY = -50;
+            star.style.left = `${startX}px`;
+            star.style.top = `${startY}px`;
+
+            // Caída animada hacia el área del texto
+            setTimeout(() => {
+                const targetX = (window.innerWidth / 2) - (text.length * 10) + index * 20;
+                const targetY = window.innerHeight / 2;
+
+                star.style.transition = 'all 3s ease';
+                star.style.transform = `translate(${targetX - startX}px, ${targetY - startY}px)`;
+
+                // Transformar estrella en letra al llegar al destino
+                setTimeout(() => {
+                    const letter = document.createElement('span');
+                    letter.textContent = char;
+                    letter.style.color = 'white';
+                    letter.style.fontSize = '3rem';
+                    textContainer.appendChild(letter);
+
+                    // Quitar la estrella después de la transformación
+                    star.remove();
+
+                    // Mostrar texto completo al final
+                    if (index === text.length - 1) {
+                        textContainer.classList.add('visible');
+                    }
+                }, 3000); // Tiempo de caída de la estrella
+            }, index * 500); // Retraso entre cada estrella
+        });
+    </script>
+</body>
+</html>
